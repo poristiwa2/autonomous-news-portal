@@ -2,8 +2,8 @@ name: Poristiwa Auto-Aggregator
 
 on:
   schedule:
-    - cron: '0 * * * *' # Runs exactly at the top of every hour
-  workflow_dispatch: # Allows you to click a button to force a manual run
+    - cron: '0 * * * *'
+  workflow_dispatch:
 
 jobs:
   build-and-deploy:
@@ -20,7 +20,17 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Brute Aggregate & Build
+      - name: Run Aggregator
+        run: node scripts/aggregate.js
+
+      # --- DEBUG STEP: SEE THE FILES ---
+      - name: Audit Generated Data
+        run: |
+          echo "Checking if JSON files exist..."
+          ls -R src/data/articles || echo "FOLDER NOT FOUND"
+      # ---------------------------------
+
+      - name: Astro Build
         run: npm run build
 
       - name: Deploy to Cloudflare Pages
@@ -28,5 +38,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: 'poristiwa' # Your Cloudflare Pages project name
-          directory: 'dist' # Astro's static output folder
+          projectName: 'poristiwa'
+          directory: 'dist'
