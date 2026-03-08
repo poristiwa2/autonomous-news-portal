@@ -23,13 +23,9 @@ jobs:
       - name: Run Aggregator
         run: node scripts/aggregate.js
 
-      # --- DEBUG STEP: SEE THE FILES ---
-      - name: Audit Generated Data
-        run: |
-          echo "Checking if JSON files exist..."
-          ls -R src/data/articles || echo "FOLDER NOT FOUND"
-      # ---------------------------------
-
+      - name: Debug - List Articles
+        run: ls -la src/data/articles || echo "Empty or missing folder"
+        
       - name: Astro Build
         run: npm run build
 
