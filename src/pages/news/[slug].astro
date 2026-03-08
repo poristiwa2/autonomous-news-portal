@@ -1,0 +1,49 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import HilltopAd from '../../components/HilltopAd.astro';
+
+// 1. Read all JSON files at build time
+export async function getStaticPaths() {
+  const articles = await Astro.glob('../../data/articles/*.json');
+  
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const publishDate = new Date(article.pubDate).toLocaleDateString('id-ID', {
+  day: 'numeric', month: 'long', year: 'numeric'
+});
+---
+
+<Layout title={article.title} description={article.content.substring(0, 150)}>
+  <article class="max-w-4xl mx-auto px-4 py-10">
+    
+    <nav class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">
+      <a href="/" class="hover:text-red-600">Home</a> / <span class="text-red-600">{article.category}</span>
+    </nav>
+
+    <h1 class="text-3xl md:text-5xl font-serif font-black text-gray-900 mb-4">
+      {article.title}
+    </h1>
+
+    <div class="text-xs text-gray-500 mb-8 border-b border-gray-100 pb-4">
+      Sumber: <strong>{article.source}</strong> • {publishDate}
+    </div>
+
+    <HilltopAd zoneId="YOUR_HILLTOP_ZONE_ID" height="90px" />
+
+    <div class="prose prose-lg max-w-none text-gray-800 leading-relaxed font-sans mt-8">
+      <p>{article.content}</p>
+      
+      <p class="mt-8 text-sm italic text-gray-500">
+        *Berita ini diagregasi secara otomatis dari {article.source}. <a href={article.link} target="_blank" class="text-blue-600 underline">Baca selengkapnya di sumber asli</a>.
+      </p>
+    </div>
+
+    <HilltopAd zoneId="YOUR_HILLTOP_ZONE_ID_2" height="250px" />
+    
+  </article>
+</Layout>
