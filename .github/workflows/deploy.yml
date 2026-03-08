@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 * * * *'
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   build-and-deploy:
@@ -18,14 +21,14 @@ jobs:
           node-version: '20'
 
       - name: Install Dependencies
-        run: npm install
+        # Added socks-proxy-agent here to ensure the aggregator works
+        run: |
+          npm install
+          npm install socks-proxy-agent
 
       - name: Run Aggregator
         run: node scripts/aggregate.js
 
-      - name: Debug - List Articles
-        run: ls -la src/data/articles || echo "Empty or missing folder"
-        
       - name: Astro Build
         run: npm run build
 
