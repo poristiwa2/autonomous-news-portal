@@ -3,34 +3,40 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import Parser from 'rss-parser';
 import slugify from 'slugify';
+import { SocksProxyAgent } from 'socks-proxy-agent';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+// --- PROXY CONFIGURATION ---
+const proxyUrl = 'socks5://tfpggoop-rotate:28794ef4pew3@p.webshare.io:80';
+const agent = new SocksProxyAgent(proxyUrl);
+
 const parser = new Parser({
+  requestOptions: {
+    agent: agent,
+  },
   headers: {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    'Accept': 'application/rss+xml, application/xml, text/xml, */*',
-    'Accept-Language': 'id-ID,id;q=0.9,en-US;q=0.8,en;q=0.7',
   },
   timeout: 15000
 });
 
 const DATA_DIR = path.resolve(__dirname, '../src/data/articles');
 
-// SWAPPING ANTARA FOR REPUBLIKA & EXTRA SINDONEWS
 const sources = [
   { name: 'Sindonews Nasional', url: 'https://www.sindonews.com/feed', category: 'Nasional' },
-  { name: 'Sindonews Ekonomi', url: 'https://ekonomi.sindonews.com/feed', category: 'Ekonomi' },
   { name: 'Republika', url: 'https://www.republika.co.id/rss', category: 'Umum' },
-  { name: 'Okezone', url: 'https://www.okezone.com/rss/berita.xml', category: 'Populer' }
+  { name: 'Suara News', url: 'https://www.suara.com/rss/news', category: 'Terkini' },
+  { name: 'Viva News', url: 'https://www.viva.co.id/get/all', category: 'Headline' }
 ];
 
 async function runAggregator() {
-  console.log(`🚀 Aggregating to: ${DATA_DIR}`);
+  console.log(`🚀 Aggregating via Proxy to: ${DATA_DIR}`);
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 
   for (const source of sources) {
     try {
-      console.log(`📡 Connecting to ${source.name}...`);
+      console.log(`📡 [PROXY ACTIVE] Connecting to ${source.name}...`);
       const feed = await parser.parseURL(source.url);
       
       let count = 0;
@@ -58,10 +64,10 @@ async function runAggregator() {
       });
       console.log(`✅ ${source.name}: +${count} articles.`);
     } catch (err) {
-      // If it's an XML error, it's a bot-block. We just log it and move on.
-      console.error(`⚠️ ${source.name} blocked or invalid: ${err.message}`);
+      console.error(`⚠️ ${source.name} failed: ${err.message}`);
     }
   }
+  console.log('🏁 Aggregation Complete!');
 }
 
 runAggregator();
