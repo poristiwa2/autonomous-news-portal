@@ -16,8 +16,8 @@ const DATA_DIR = path.resolve(__dirname, '../src/data/articles');
 
 const sources = [
   { name: 'Sindonews', url: 'https://www.sindonews.com/feed', category: 'Nasional' },
-  { name: 'VOA Indonesia', url: 'https://www.voaindonesia.com/api/z-_oqyum_v', category: 'Internasional' }, // Updated Link
-  { name: 'BBC Indonesia', url: 'https://www.bbc.com/indonesia/index.xml', category: 'Dunia' },
+  { name: 'Liputan6', url: 'https://www.liputan6.com/rss', category: 'Terkini' }, // Reliable Replacement
+  { name: 'Okezone', url: 'https://www.okezone.com/rss/berita.xml', category: 'Populer' }, // High Volume  { name: 'BBC Indonesia', url: 'https://www.bbc.com/indonesia/index.xml', category: 'Dunia' },
   { name: 'Antara', url: 'https://www.antaranews.com/rss/terkini.xml', category: 'Terkini' }
 ];
 
