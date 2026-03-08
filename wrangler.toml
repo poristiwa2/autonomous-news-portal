@@ -1,0 +1,8 @@
+name = "poristiwa-news-portal"
+pages_build_output_dir = "./dist"
+compatibility_date = "2026-03-08"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "poristiwa-db"
+database_id = "49fc255a-c312-4853-b290-ead3e4c3490b"
