@@ -1,0 +1,41 @@
+---
+const { zoneId, height = "250px" } = Astro.props;
+---
+
+<div class="ht-ad-wrapper" style={`min-height: ${height};`}>
+  <div class="ht-ad-label">Advertisement</div>
+  
+  <script async src={`https://hilltopads.com/api/zone/${zoneId}`}></script>
+</div>
+
+<style>
+  .ht-ad-wrapper {
+    width: 100%;
+    background-color: #f8fafc; /* Very light gray */
+    border: 1px dashed #cbd5e1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .ht-ad-label {
+    position: absolute;
+    color: #94a3b8;
+    font-size: 0.70rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    z-index: 0;
+  }
+
+  /* Force the ad to sit above the label */
+  .ht-ad-wrapper :global(iframe), 
+  .ht-ad-wrapper :global(div[id^="hilltop"]) {
+    position: relative;
+    z-index: 10;
+  }
+</style>
