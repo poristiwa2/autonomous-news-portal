@@ -2,13 +2,9 @@
   "name": "poristiwa-portal",
   "type": "module",
   "version": "1.0.0",
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "node scripts/aggregate.js && astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
+"scripts": {
+  "build": "node scripts/aggregate.js && astro build"
+}
   "dependencies": {
     "astro": "^4.0.0",
     "rss-parser": "^3.13.0",
