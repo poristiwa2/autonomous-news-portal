@@ -1,0 +1,57 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HilltopAd from '../components/HilltopAd.astro';
+
+// 1. Fetch all JSON files from the data directory
+const allArticles = await Astro.glob('../data/articles/*.json');
+
+// 2. Sort articles by date (Newest First)
+const sortedArticles = allArticles.sort((a, b) => 
+  new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
+).slice(0, 24); // Show top 24 on homepage
+---
+
+<Layout title="Poristiwa - Nadi Peristiwa Terkini" description="Portal berita tercepat dengan kurasi editorial 24 jam.">
+  <main class="max-w-7xl mx-auto px-4 py-12">
+    
+    <header class="mb-12">
+      <h1 class="text-5xl font-serif font-black text-gray-900 mb-2">Laporan Utama</h1>
+      <p class="text-gray-500 uppercase tracking-widest text-xs font-bold">Edisi {new Date().toLocaleDateString('id-ID', { dateStyle: 'full' })}</p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {sortedArticles.map((article, index) => (
+        <div class="group">
+          <a href={`/news/${article.slug}`} class="block">
+            <div class="mb-4">
+              <span class="text-red-600 font-black text-[10px] uppercase tracking-tighter border-b-2 border-red-600 pb-1">
+                {article.category}
+              </span>
+            </div>
+            <h2 class="text-xl font-bold text-gray-900 group-hover:text-red-600 transition-colors leading-tight mb-3">
+              {article.title}
+            </h2>
+            <p class="text-sm text-gray-600 line-clamp-3 mb-4">
+              {article.content}...
+            </p>
+            <div class="text-[10px] font-bold text-gray-400 uppercase">
+              {article.source} • {new Date(article.pubDate).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} WIB
+            </div>
+          </a>
+          
+          {(index === 5 || index === 11) && (
+            <div class="col-span-full my-8">
+               <HilltopAd zoneId="YOUR_ZONE_ID" height="120px" />
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+
+    {sortedArticles.length === 0 && (
+      <div class="text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
+        <p class="text-gray-400 font-serif italic">Menunggu update dari meja redaksi...</p>
+      </div>
+    )}
+  </main>
+</Layout>
