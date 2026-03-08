@@ -36,3 +36,4 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           projectName: 'poristiwa'
           directory: 'dist'
+          branch: 'main'
